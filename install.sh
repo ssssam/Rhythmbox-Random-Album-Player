@@ -7,8 +7,6 @@ cat <<EOF
 Usage:
 $0 [OPTION]
 -h, --help      show this message.
--2, --rb2     install the plugin for rhythmbox version 2.96 to 2.99 (default).
--3, --rb3       install the plugin for rhythmbox 3
 -n, --no-sudo   work without sudo, but requires modifications to bashrc
 
 EOF
@@ -17,7 +15,7 @@ EOF
 ########################### OPTIONS PARSING #################################
 
 #parse options
-TMP=`getopt --name=$0 -a --longoptions=rb2,rb3,no-sudo,help -o 2,3,n,h -- $@`
+TMP=`getopt --name=$0 -a --longoptions=no-sudo,help -o n,h -- $@`
 
 if [[ $? == 1 ]]
 then
@@ -30,12 +28,6 @@ eval set -- $TMP
 
 until [[ $1 == -- ]]; do
     case $1 in
-        -2|--rb2)
-            RB=true
-            ;;
-        -3|--rb3)
-            RB=false
-            ;;
         -n|--no-sudo)
             SUDO=false
             ;;
@@ -49,7 +41,6 @@ done
 shift # remove the '--', now $1 positioned at first argument if any
 
 #default values
-RB=${RB:=true}
 SUDO=${SUDO:=true}
 
 ########################## START INSTALLATION ################################
@@ -74,11 +65,8 @@ mkdir -p $PLUGIN_PATH
 #copy the files
 cp -r "${SCRIPT_PATH}"* "$PLUGIN_PATH"
 
-#install the plugin; the install path depends on the install mode
-if [[ $RB == false ]]
-then
-    mv "$PLUGIN_PATH"rhythmbox-random-album-player.plugin3 "$PLUGIN_PATH"rhythmbox-random-album-player.plugin
-fi
+#install the plugin
+mv "$PLUGIN_PATH"rhythmbox-random-album-player.plugin "$PLUGIN_PATH"rhythmbox-random-album-player.plugin
 
 #remove the install script from the dir (not needed)
 rm "${PLUGIN_PATH}${SCRIPT_NAME}"
