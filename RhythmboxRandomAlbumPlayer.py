@@ -106,7 +106,7 @@ class RandomAlbumPlugin(GObject.Object, Peas.Activatable):
     player = self.shell.props.shell_player
     player.stop()
     player.set_playing_source(self.shell.props.queue_source)
-    player.playpause(True)
+    player.playpause()
 
   def scroll_to_current_song(self):
     song = self.shell.props.shell_player.get_playing_entry()
