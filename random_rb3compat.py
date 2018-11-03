@@ -614,15 +614,18 @@ class ApplicationShell(object):
                     
                     group = self._action_groups[group_name]
                     act = group.get_action(action_name)
-                    
+
+                    action_name = 'app.' + action_name
+
                     item = Gio.MenuItem()
-                    item.set_detailed_action('app.' + action_name)
+                    item.set_detailed_action(action_name)
                     item.set_label(act.label)
                     item.set_attribute_value("accel", GLib.Variant("s", act.accel))
                     app = Gio.Application.get_default()
                     index = menu+action_name
                     app.add_plugin_menu_item(menu, 
                         index, item)
+                    app.set_accels_for_action(action_name, [act.accel])
                     self._uids[index] = menu
             else:
                 uim = self.shell.props.ui_manager
